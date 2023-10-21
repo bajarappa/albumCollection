@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 
-export default function AddAlbum({ addAlbum, onOpenAddDialog }) {
-  const [newAlbumTitle, setNewAlbumTitle] = useState("");
-  const [newUserId, setNewUserId] = useState("");
-
-  const handleAddAlbum = () => {
-    if (newAlbumTitle.trim() === "" || newUserId.trim() === "") {
-      return alert("Album title and user Id can't be empty");
-    }
-    addAlbum({ title: newAlbumTitle, userId: newUserId });
+export default function UpdateAlbum({
+  updateAlbum,
+  onOpenUpdateDialog,
+  albums,
+}) {
+  const [editAlbumTitle, setEditAlbumTitle] = useState(null);
+  const handleUpdateAlbum = () => {
+    updateAlbum({ title: editAlbumTitle, albumid });
   };
 
   return (
@@ -45,26 +44,6 @@ export default function AddAlbum({ addAlbum, onOpenAddDialog }) {
       --> */}
             <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
               <div>
-                {" "}
-                <div>
-                  <label
-                    htmlFor="userId"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    User ID
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      value={newUserId}
-                      onChange={(e) => setNewUserId(e.target.value)}
-                      type="text"
-                      name="userId"
-                      id="userId"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      placeholder="Userid"
-                    />
-                  </div>
-                </div>
                 <div>
                   <label
                     htmlFor="albumTitle"
@@ -74,8 +53,13 @@ export default function AddAlbum({ addAlbum, onOpenAddDialog }) {
                   </label>
                   <div className="mt-2">
                     <input
-                      value={newAlbumTitle}
-                      onChange={(e) => setNewAlbumTitle(e.target.value)}
+                      value={editAlbumTitle}
+                      onChange={(e) =>
+                        setEditAlbumTitle({
+                          ...editAlbumTitle,
+                          title: e.target.value,
+                        })
+                      }
                       type="text"
                       name="albumTitle"
                       id="albumTitle"
@@ -87,14 +71,14 @@ export default function AddAlbum({ addAlbum, onOpenAddDialog }) {
               </div>
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                 <button
-                  onClick={handleAddAlbum}
+                  onClick={handleUpdateAlbum}
                   type="button"
                   className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
                 >
-                  Add Album
+                  Update Album
                 </button>
                 <button
-                  onClick={onOpenAddDialog}
+                  onClick={onOpenUpdateDialog}
                   type="button"
                   className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                 >
