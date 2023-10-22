@@ -5,7 +5,7 @@ export default function UpdateAlbum({ onUpdate, onOpenUpdateDialogue, album }) {
 
   const handleUpdateAlbum = () => {
     onUpdate({ title: editAlbum, id: album.id });
-    setEditAlbum("");
+    // setEditAlbum("");
   };
 
   return (
