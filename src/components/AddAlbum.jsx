@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
 export default function AddAlbum({ addAlbum, onOpenAddDialog }) {
+  // State variables
   const [newAlbumTitle, setNewAlbumTitle] = useState("");
   const [newUserId, setNewUserId] = useState("");
 
+  // Function to send add album data
   const handleAddAlbum = () => {
     if (newAlbumTitle.trim() === "" || newUserId.trim() === "") {
       return alert("Album title and user Id can't be empty");

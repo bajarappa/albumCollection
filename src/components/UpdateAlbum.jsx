@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 export default function UpdateAlbum({ onUpdate, onOpenUpdateDialogue, album }) {
+  //
   const [editAlbum, setEditAlbum] = useState(album.title);
 
   const handleUpdateAlbum = () => {
-    onUpdate({ title: editAlbum, id: album.id });
-    // setEditAlbum("");
+    onUpdate({ ...album, title: editAlbum });
   };
 
   return (

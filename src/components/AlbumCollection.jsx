@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import UpdateAlbum from "./UpdateAlbum"; // Import the UpdateAlbum component
+import UpdateAlbum from "./UpdateAlbum";
 import GetAlbum from "./GetAlbums";
 import AddAlbum from "./AddAlbum";
 import Header from "./Header";
 
-const AlbumCollection = () => {
+export default AlbumCollection = () => {
+  // State variables
   const [albums, setAlbums] = useState([]);
   const [openAddDialogue, setOpenAddDialogue] = useState(false);
   const [editAlbumId, setEditAlbumId] = useState(null);
+
+  // Fetch albums from the API on component mount
   useEffect(() => {
     // Fetch albums from the API using async/await
     const fetchAlbums = async () => {
@@ -43,6 +46,7 @@ const AlbumCollection = () => {
     }
   };
 
+  // Functio to update album
   const updateAlbum = async (updatedAlbum) => {
     try {
       const response = await axios.put(
@@ -66,7 +70,6 @@ const AlbumCollection = () => {
   };
 
   // Function to delete albums
-
   const deleteAlbum = async (id) => {
     try {
       const confirmDelete = window.confirm("Are you sure you want to delete");
@@ -76,7 +79,6 @@ const AlbumCollection = () => {
         );
         console.log(result.data);
         setAlbums(albums.filter((album) => album.id !== id));
-        // console.log(albums);}
       }
     } catch (err) {
       console.error(err);
@@ -116,5 +118,3 @@ const AlbumCollection = () => {
     </div>
   );
 };
-
-export default AlbumCollection;
