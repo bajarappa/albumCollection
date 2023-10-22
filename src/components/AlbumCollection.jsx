@@ -69,12 +69,15 @@ const AlbumCollection = () => {
 
   const deleteAlbum = async (id) => {
     try {
-      const result = await axios.delete(
-        `https://jsonplaceholder.typicode.com/albums/${id}`
-      );
-      console.log(result.data);
-      setAlbums(albums.filter((album) => album.id !== id));
-      // console.log(albums);
+      const confirmDelete = window.confirm("Are you sure you want to delete");
+      if (confirmDelete) {
+        const result = await axios.delete(
+          `https://jsonplaceholder.typicode.com/albums/${id}`
+        );
+        console.log(result.data);
+        setAlbums(albums.filter((album) => album.id !== id));
+        // console.log(albums);}
+      }
     } catch (err) {
       console.error(err);
     }
