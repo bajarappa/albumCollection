@@ -1,30 +1,27 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import UpdateAlbum from "./UpdateAlbum"; // Import the UpdateAlbum component
 import GetAlbum from "./GetAlbums";
-import Header from "./Header";
 import AddAlbum from "./AddAlbum";
-import UpdateAlbum from "./UpdateAlbum";
+import Header from "./Header";
 
-export default function AlbumCollection() {
-  // State variables
+const AlbumCollection = () => {
   const [albums, setAlbums] = useState([]);
-  const [openAddDialog, setOpenAddDialog] = useState(false);
-  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
-  // Fetch albums from the API on component mount
+  const [openAddDialogue, setOpenAddDialogue] = useState(false);
+  const [editAlbumId, setEditAlbumId] = useState(null);
   useEffect(() => {
-    //Function to fetch data from api
-    const fetchData = async () => {
+    // Fetch albums from the API using async/await
+    const fetchAlbums = async () => {
       try {
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/albums"
         );
-        console.log(response.data);
         setAlbums(response.data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       }
     };
-    fetchData();
+    fetchAlbums();
   }, []);
 
   // Function to add new album
@@ -40,13 +37,36 @@ export default function AlbumCollection() {
         { ...response.data, id: albums.length + 1 },
       ];
       setAlbums(updatedAlbums);
-      setOpenAddDialog(false);
+      setOpenAddDialogue(false);
     } catch (err) {
       console.error(err);
     }
   };
 
+  const updateAlbum = async (updatedAlbum) => {
+    try {
+      const response = await axios.put(
+        `https://jsonplaceholder.typicode.com/albums/${updatedAlbum.id}`,
+        updatedAlbum,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const updatedAlbumData = response.data;
+      const updatedAlbums = albums.map((album) =>
+        album.id === updatedAlbumData.id ? updatedAlbumData : album
+      );
+      setAlbums(updatedAlbums);
+      setEditAlbumId(null); // Clear the edit state
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Function to delete albums
+
   const deleteAlbum = async (id) => {
     try {
       const result = await axios.delete(
@@ -54,48 +74,44 @@ export default function AlbumCollection() {
       );
       console.log(result.data);
       setAlbums(albums.filter((album) => album.id !== id));
-      console.log(albums);
+      // console.log(albums);
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Function to update the albums
-  const updateAlbum = async (id, updatedData) => {
-    const response = await axios.put(
-      `https://jsonplaceholder.typicode.com/albums/${id}`,
-      updatedData
-    );
-    setAlbums(albums.map((album) => (album.id === id ? response.data : album)));
-    setOpenUpdateDialog(false);
-  };
-
   return (
-    <>
-      <Header onOpenDialog={() => setOpenAddDialog(true)} />
+    <div>
+      <Header onOpenDialogue={() => setOpenAddDialogue(true)} />
       <div className="grid grid-cols-1 sm:grid-cols-3 mx-auto max-w-7xl gap-4 p-4 sm:p-0 mb-4">
         {albums.map((album) => (
-          <GetAlbum
-            key={album.id}
-            album={album}
-            deleteAlbum={deleteAlbum}
-            onOpenUpdateDialog={() => setOpenUpdateDialog(true)}
-          />
+          <div key={album.id}>
+            {editAlbumId === album.id ? (
+              <UpdateAlbum
+                album={album}
+                onUpdate={updateAlbum}
+                onOpenUpdateDialogue={() => setEditAlbumId(null)}
+              />
+            ) : (
+              <GetAlbum
+                key={album.id}
+                album={album}
+                deleteAlbum={() => deleteAlbum(album.id)}
+                onOpenUpdateDialogue={() => setEditAlbumId(album.id)}
+              />
+            )}
+          </div>
         ))}
       </div>
-      {openAddDialog && (
+
+      {openAddDialogue && (
         <AddAlbum
           addAlbum={addAlbum}
-          onOpenAddDialog={() => setOpenAddDialog(false)}
+          onOpenAddDialog={() => setOpenAddDialogue(false)}
         />
       )}
-      {openUpdateDialog && (
-        <UpdateAlbum
-          onOpenUpdateDialog={() => setOpenUpdateDialog(false)}
-          updateAlbum={updateAlbum}
-          albums={albums}
-        />
-      )}
-    </>
+    </div>
   );
-}
+};
+
+export default AlbumCollection;

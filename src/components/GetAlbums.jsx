@@ -3,8 +3,8 @@ import React from "react";
 export default function GetAlbum({
   album,
   deleteAlbum,
-
-  onOpenUpdateDialog,
+  editAlbum,
+  onOpenUpdateDialogue,
 }) {
   // Handling delete album function
   const handleDeleteAlbum = () => {
@@ -17,7 +17,8 @@ export default function GetAlbum({
         <h1>{album.title}</h1>
         <div className="flex gap-x-2">
           <button
-            onClick={onOpenUpdateDialog}
+            // onClick={editAlbum}
+            onClick={onOpenUpdateDialogue}
             type="button"
             className="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white  hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
